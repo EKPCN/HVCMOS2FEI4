@@ -179,6 +179,7 @@ void  Funkcije::SendLoadConf()
    genio->addpair( 0x41, pattern);
    genio->addpair( 0x41, pattern);
 }
+
 void Funkcije::SendLoadDAC()
 {
    unsigned char pattern;  //bit patterns for 8 bit registers in xilinx
@@ -203,7 +204,8 @@ void Funkcije::SendLoadDAC()
 }
 void Funkcije::SendH35Config()
 {
-//TODO
+/*
+    //TODO
   for (int icol=0; icol<38; icol++) {
     if( (37-icol) == FormMain -> EditH35Col -> Text.ToInt() )
     {
@@ -242,7 +244,7 @@ void Funkcije::SendH35Config()
     }
 
   }//rows
-
+*/
 }
 void  Funkcije::Refresh()
 {
