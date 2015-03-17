@@ -17,15 +17,17 @@ SOURCES += main.cpp\
     libs/config.cpp \
     libs/ftdi.cpp \
     libs/func.cpp \
-    libs/geniobase.cpp
+    libs/geniobase.cpp \
+    libs/plot.cpp
 
 HEADERS  += mainwindow.h \
     libs/geniobase.h \
     libs/config.h \
     libs/ftdi.h \
     libs/func.h \
-    libs/geniobase.h
+    libs/geniobase.h \
+    libs/plot.h
 FORMS    += mainwindow.ui
 
-LIBS +=../hvcmos -lftd2xx
+LIBS += -L../2fei4 -lftd2xx
 QMAKE_CXXFLAGS += -pthread -fopenmp -Wunused-parameter

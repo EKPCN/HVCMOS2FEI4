@@ -45,7 +45,43 @@ void MainWindow::on_Update_clicked()
           Usb -> SendDACSensor(H35DAC[1], false );
            Usb -> SendDACSensor(H35DAC[0], false );
 
-     Usb -> SendH35Config();
+     //Usb -> SendH35Config();
+     // SendH35Config
+     for (int icol=0; icol<38; icol++)
+     {
+       if( (37-icol) == ui->H35Col->value())// FormMain -> EditH35Col -> Text.ToInt() )
+       {
+           Usb->SendBitSensor(((37-icol) == 0)&&(ui->checkbox_AOutToMon->isChecked() == true));//MuxEn
+           Usb->SendBitSensor(ui->checkbox_InjToPixel->isChecked());//InjToCol
+           Usb->SendBitSensor(ui->checkbox_TestToMon->isChecked());//TestToMon
+           Usb->SendBitSensor(ui->checkbox_InjToTest->isChecked());//InjToTest
+       }
+       else
+       {
+           Usb->SendBitSensor(((37-icol) == 0)&&(ui->checkbox_AOutToMon->isChecked() == true));//
+           Usb->SendBitSensor(false);//
+           Usb->SendBitSensor(false);//
+           Usb->SendBitSensor(false);//
+       }
+     }//cols
+     for (int irow=0; irow<8; irow++) {
+
+       if( (7-irow) == ui->H35Row->value())//FormMain -> EditH35Row -> Text.ToInt() )
+       {
+           Usb->SendBitSensor(false);//nn
+           Usb->SendBitSensor((7-irow) == ui->RowToAOut->value());//SF
+           Usb->SendBitSensor(ui->checkbox_InjToPixel->isChecked());//Inj
+           Usb->SendBitSensor(ui->checkbox_PixelToTest->isChecked());//Test
+       }
+       else
+       {
+           Usb->SendBitSensor(false);//nn
+           Usb->SendBitSensor((7-irow) == ui->RowToAOut->value());//SF
+           Usb->SendBitSensor(false);//
+           Usb->SendBitSensor(false);//
+       }
+
+     }//rows
 
      Usb -> SendLoadDAC();
 
