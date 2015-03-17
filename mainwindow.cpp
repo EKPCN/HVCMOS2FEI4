@@ -3,14 +3,61 @@
 #include "libs/geniobase.h"
 #include "libs/ftdi.h"
 #include "libs/func.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    bool open = false;
     ui->setupUi(this);
     genio = new GenioBase();
     ftdi = new FTDI();
+    FT_STATUS ftStatus;
+    FT_HANDLE ftHandleTemp;
+    DWORD numDevs;
+    DWORD Flags;
+    DWORD ID;
+    DWORD Type;
+    DWORD LocId;
+    char SerialNumber[16];
+    char Description[64];
+    //usleep(100000);
+    // create the device information list
+    ftStatus = FT_CreateDeviceInfoList(&numDevs);
+    if (ftStatus == FT_OK)
+    {
+        std::cout << "Number of devices is " << numDevs << std::endl;
+    }
+    //if (numDevs > 0) {
+    for(int i=0; i<numDevs; i++)
+    {
+        // get information for all devices
+        ftStatus = FT_GetDeviceInfoDetail(i, &Flags, &Type, &ID, &LocId, SerialNumber, Description, &ftHandleTemp);
+        if (ftStatus == FT_OK)
+        {
+            std::cout << "Dev " << i << std::endl;
+            std::cout << " Flags  =" << Flags << std::endl;
+            std::cout << " Type = " << Type << std::endl;
+            std::cout << " ID = " << ID << std::endl;
+            std::cout << " LocId = " << LocId << std::endl;
+            std::cout << " SerialNumber = " << SerialNumber << std::endl;
+            std::cout << " Description = " << Description << std::endl;
+            std::cout << " ftHandle = " << ftHandleTemp << std::endl;
+        }
+        //select Uxibo channel B
+        std::string Descrip = std::string(Description);
+        if ( (Descrip.substr(0,5) == "Uxibo") && (Descrip.substr(16,1)=="B"))
+        {
+            open = ftdi->Open(i);
+        }
+    }
+
+    if(!open)
+        throw 2;
+    else
+        //logit("Board successfully initialized.");
+    genio->initializeFtdi(ftdi);
 }
 
 MainWindow::~MainWindow()
